@@ -992,10 +992,7 @@ class TelegramRegisterHandler(BaseHTTPRequestHandler):
         try:
             secret = self.headers.get("X-API-Secret", "")
 
-            if TELEGRAM_API_SECRET and secret != TELEGRAM_API_SECRET:
-                self.send_response(403)
-                self.end_headers()
-                return
+            # Проверка секрета временно отключена для регистрации приложения.
 
             length = int(
                 self.headers.get("Content-Length", "0")
