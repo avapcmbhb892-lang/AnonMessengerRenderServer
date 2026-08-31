@@ -962,7 +962,7 @@ import json
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 HTTP_HOST = "0.0.0.0"
-HTTP_PORT = int(os.environ.get("TELEGRAM_API_PORT", "5001"))
+HTTP_PORT = int(os.environ.get("PORT", os.environ.get("TELEGRAM_API_PORT", "5001")))
 TELEGRAM_API_SECRET = os.environ.get(
     "TELEGRAM_API_SECRET",
     ""
