@@ -49,6 +49,35 @@ def db():
     """)
     conn.commit()
 
+    # Миграция старой таблицы users.
+    # Добавляем поля, необходимые для авторизации и Telegram-регистрации.
+    columns = {
+        "public_id": "TEXT",
+        "phone_hash": "TEXT",
+        "description": "TEXT DEFAULT ''",
+        "avatar": "TEXT DEFAULT ''",
+        "token": "TEXT",
+        "balance": "INTEGER DEFAULT 0",
+        "verified": "INTEGER DEFAULT 0",
+        "banned": "INTEGER DEFAULT 0",
+        "telegram_username": "TEXT DEFAULT ''",
+        "telegram_first_name": "TEXT DEFAULT ''",
+        "telegram_last_name": "TEXT DEFAULT ''"
+    }
+
+    existing = {
+        row[1]
+        for row in conn.execute("PRAGMA table_info(users)").fetchall()
+    }
+
+    for name, definition in columns.items():
+        if name not in existing:
+            conn.execute(
+                f"ALTER TABLE users ADD COLUMN {name} {definition}"
+            )
+
+    conn.commit()
+
     conn.execute("""
         CREATE TABLE IF NOT EXISTS account_labels (
             user_id INTEGER PRIMARY KEY,
